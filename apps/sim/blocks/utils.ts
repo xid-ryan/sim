@@ -1,4 +1,4 @@
-import { isHosted } from '@/lib/core/config/feature-flags'
+import { isHosted, isServerKeysEnabled } from '@/lib/core/config/feature-flags'
 import type { BlockOutput, OutputFieldDefinition, SubBlockConfig } from '@/blocks/types'
 import { getHostedModels, getProviderFromModel, providers } from '@/providers/utils'
 import { useProvidersStore } from '@/stores/providers/store'
@@ -64,7 +64,7 @@ function shouldRequireApiKeyForModel(model: string): boolean {
   const isHostedModel = hostedModels.some(
     (hostedModel) => hostedModel.toLowerCase() === normalizedModel
   )
-  if (isHosted && isHostedModel) return false
+  if ((isHosted || isServerKeysEnabled) && isHostedModel) return false
 
   if (normalizedModel.startsWith('vertex/') || normalizedModel.startsWith('bedrock/')) {
     return false

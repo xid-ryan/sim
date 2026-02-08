@@ -1,6 +1,7 @@
 import Anthropic from '@anthropic-ai/sdk'
 import { createLogger } from '@sim/logger'
 import type { StreamingExecution } from '@/executor/types'
+import { env } from '@/lib/core/config/env'
 import { executeAnthropicProviderRequest } from '@/providers/anthropic/core'
 import { getProviderDefaultModel, getProviderModels } from '@/providers/models'
 import type { ProviderConfig, ProviderRequest, ProviderResponse } from '@/providers/types'
@@ -24,6 +25,7 @@ export const anthropicProvider: ProviderConfig = {
       createClient: (apiKey, useNativeStructuredOutputs) =>
         new Anthropic({
           apiKey,
+          baseURL: env.ANTHROPIC_BASE_URL?.replace(/\/$/, '') || undefined,
           defaultHeaders: useNativeStructuredOutputs
             ? { 'anthropic-beta': 'structured-outputs-2025-11-13' }
             : undefined,

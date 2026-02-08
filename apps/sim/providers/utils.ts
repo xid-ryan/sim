@@ -3,7 +3,7 @@ import type OpenAI from 'openai'
 import type { ChatCompletionChunk } from 'openai/resources/chat/completions'
 import type { CompletionUsage } from 'openai/resources/completions'
 import { env } from '@/lib/core/config/env'
-import { isHosted } from '@/lib/core/config/feature-flags'
+import { isHosted, isServerKeysEnabled } from '@/lib/core/config/feature-flags'
 import { isCustomTool } from '@/executor/constants'
 import {
   getComputerUseModels,
@@ -663,7 +663,7 @@ export function getApiKey(provider: string, model: string, userProvidedKey?: str
   const isClaudeModel = provider === 'anthropic'
   const isGeminiModel = provider === 'google'
 
-  if (isHosted && (isOpenAIModel || isClaudeModel || isGeminiModel)) {
+  if ((isHosted || isServerKeysEnabled) && (isOpenAIModel || isClaudeModel || isGeminiModel)) {
     const hostedModels = getHostedModels()
     const isModelHosted = hostedModels.some((m) => m.toLowerCase() === model.toLowerCase())
 

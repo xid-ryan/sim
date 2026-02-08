@@ -26,6 +26,15 @@ export const isHosted =
   getEnv('NEXT_PUBLIC_APP_URL') === 'https://www.staging.sim.ai'
 
 /**
+ * Are server-managed API keys enabled for self-hosted deployments.
+ * When true, server-configured rotating API keys (e.g., ANTHROPIC_API_KEY_1)
+ * are used for all users without requiring UI input.
+ * This flag is blocked when isHosted is true (hosted environment manages its own keys).
+ */
+export const isServerKeysEnabled =
+  (isTruthy(env.USE_SERVER_KEYS) || isTruthy(getEnv('NEXT_PUBLIC_USE_SERVER_KEYS'))) && !isHosted
+
+/**
  * Is billing enforcement enabled
  */
 export const isBillingEnabled = isTruthy(env.BILLING_ENABLED)

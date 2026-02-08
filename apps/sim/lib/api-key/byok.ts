@@ -3,7 +3,7 @@ import { workspaceBYOKKeys } from '@sim/db/schema'
 import { createLogger } from '@sim/logger'
 import { and, eq } from 'drizzle-orm'
 import { getRotatingApiKey } from '@/lib/core/config/api-keys'
-import { isHosted } from '@/lib/core/config/feature-flags'
+import { isHosted, isServerKeysEnabled } from '@/lib/core/config/feature-flags'
 import { decryptSecret } from '@/lib/core/security/encryption'
 import { getHostedModels } from '@/providers/models'
 import { useProvidersStore } from '@/stores/providers/store'
@@ -80,7 +80,7 @@ export async function getApiKeyWithBYOK(
   const byokProviderId = isGeminiModel ? 'google' : (provider as BYOKProviderId)
 
   if (
-    isHosted &&
+    (isHosted || isServerKeysEnabled) &&
     workspaceId &&
     (isOpenAIModel || isClaudeModel || isGeminiModel || isMistralModel)
   ) {
