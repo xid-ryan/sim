@@ -71,8 +71,10 @@ spec:
             - name: OLLAMA_URL
               value: {{ include "sim.ollamaUrl" . | quote }}
             {{- range $key, $value := omit .Values.app.env "DATABASE_URL" "SOCKET_SERVER_URL" "OLLAMA_URL" }}
+            {{- if not (kindIs "invalid" $value) }}
             - name: {{ $key }}
               value: {{ $value | quote }}
+            {{- end }}
             {{- end }}
             {{- if .Values.telemetry.enabled }}
             # OpenTelemetry configuration
