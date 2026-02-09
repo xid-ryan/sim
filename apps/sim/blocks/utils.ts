@@ -64,7 +64,15 @@ function shouldRequireApiKeyForModel(model: string): boolean {
   const isHostedModel = hostedModels.some(
     (hostedModel) => hostedModel.toLowerCase() === normalizedModel
   )
-  if ((isHosted || isServerKeysEnabled) && isHostedModel) return false
+  if (isHosted && isHostedModel) return false
+  if (isServerKeysEnabled && isHostedModel) {
+    try {
+      const providerId = getProviderFromModel(model)
+      if (providerId === 'anthropic') return false
+    } catch {
+      // fall through
+    }
+  }
 
   if (normalizedModel.startsWith('vertex/') || normalizedModel.startsWith('bedrock/')) {
     return false

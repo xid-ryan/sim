@@ -80,9 +80,9 @@ export async function getApiKeyWithBYOK(
   const byokProviderId = isGeminiModel ? 'google' : (provider as BYOKProviderId)
 
   if (
-    (isHosted || isServerKeysEnabled) &&
-    workspaceId &&
-    (isOpenAIModel || isClaudeModel || isGeminiModel || isMistralModel)
+    ((isHosted && (isOpenAIModel || isClaudeModel || isGeminiModel || isMistralModel)) ||
+      (isServerKeysEnabled && isClaudeModel)) &&
+    workspaceId
   ) {
     const hostedModels = getHostedModels()
     const isModelHosted = hostedModels.some((m) => m.toLowerCase() === model.toLowerCase())

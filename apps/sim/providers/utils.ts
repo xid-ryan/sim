@@ -663,7 +663,7 @@ export function getApiKey(provider: string, model: string, userProvidedKey?: str
   const isClaudeModel = provider === 'anthropic'
   const isGeminiModel = provider === 'google'
 
-  if ((isHosted || isServerKeysEnabled) && (isOpenAIModel || isClaudeModel || isGeminiModel)) {
+  if ((isHosted && (isOpenAIModel || isClaudeModel || isGeminiModel)) || (isServerKeysEnabled && isClaudeModel)) {
     const hostedModels = getHostedModels()
     const isModelHosted = hostedModels.some((m) => m.toLowerCase() === model.toLowerCase())
 
